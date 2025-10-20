@@ -27,7 +27,7 @@ function TestLoader:LoadFullScreen()
     print("🎯 TEST: Loading your FULL loading screen...")
     
     -- Load your full loading screen from GitHub
-    local url = "https://raw.githubusercontent.com/forcegod20/testscript/refs/heads/main/half%20loading%20screen"
+    local url = "https://raw.githubusercontent.com/forcegod20/testscript/refs/heads/main/full%20loading%20screen"
     
     local success, result = pcall(function()
         local response = game:HttpGet(url)
