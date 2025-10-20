@@ -1,0 +1,144 @@
+-- simple_test_loader.lua
+local TestLoader = {}
+
+function TestLoader:LoadHalfScreen()
+    print("🎯 TEST: Loading your HALF loading screen...")
+    
+    -- Load your half loading screen from GitHub
+    local url = "https://raw.githubusercontent.com/forcegod20/testscript/refs/heads/main/half%20loading%20screen"
+    
+    local success, result = pcall(function()
+        local response = game:HttpGet(url)
+        local loadedFunction = loadstring(response)
+        return loadedFunction()
+    end)
+    
+    if success then
+        print("✅ HALF loading screen loaded successfully!")
+        print("📝 Check if you can see the half screen loading animation")
+        return true
+    else
+        print("❌ FAILED to load half loading screen: " .. tostring(result))
+        return false
+    end
+end
+
+function TestLoader:LoadFullScreen()
+    print("🎯 TEST: Loading your FULL loading screen...")
+    
+    -- Load your full loading screen from GitHub
+    local url = "https://raw.githubusercontent.com/forcegod20/testscript/refs/heads/main/half%20loading%20screen"
+    
+    local success, result = pcall(function()
+        local response = game:HttpGet(url)
+        local loadedFunction = loadstring(response)
+        return loadedFunction()
+    end)
+    
+    if success then
+        print("✅ FULL loading screen loaded successfully!")
+        print("📝 Check if you can see the full screen with blocking features")
+        return true
+    else
+        print("❌ FAILED to load full loading screen: " .. tostring(result))
+        return false
+    end
+end
+
+function TestLoader:RemoveAllScreens()
+    print("🗑️ Removing all loading screens...")
+    
+    local Players = game:GetService("Players")
+    local CoreGui = game:GetService("CoreGui")
+    local player = Players.LocalPlayer
+    local playerGui = player:WaitForChild("PlayerGui")
+    
+    -- Remove from PlayerGui
+    local halfScreen = playerGui:FindFirstChild("ProfessionalLoadingScreen")
+    if halfScreen then
+        halfScreen:Destroy()
+        print("✅ Removed half screen from PlayerGui")
+    end
+    
+    -- Remove from CoreGui
+    local fullScreen = CoreGui:FindFirstChild("FinalStageLoadingScreen")
+    if fullScreen then
+        fullScreen:Destroy()
+        print("✅ Removed full screen from CoreGui")
+    end
+    
+    local blackBg = CoreGui:FindFirstChild("BlackBackground")
+    if blackBg then
+        blackBg:Destroy()
+        print("✅ Removed black background from CoreGui")
+    end
+    
+    print("✅ All screens removed!")
+end
+
+function TestLoader:CheckWhatExists()
+    print("🔍 Checking what loading screens exist...")
+    
+    local Players = game:GetService("Players")
+    local CoreGui = game:GetService("CoreGui")
+    local player = Players.LocalPlayer
+    local playerGui = player:WaitForChild("PlayerGui")
+    
+    print("PlayerGui contents:")
+    for i, child in pairs(playerGui:GetChildren()) do
+        if child:IsA("ScreenGui") then
+            print("   - " .. child.Name .. " (Enabled: " .. tostring(child.Enabled) .. ")")
+        end
+    end
+    
+    print("CoreGui contents (loading screens only):")
+    for i, child in pairs(CoreGui:GetChildren()) do
+        if child:IsA("ScreenGui") and (child.Name == "FinalStageLoadingScreen" or child.Name == "BlackBackground") then
+            print("   - " .. child.Name .. " (Enabled: " .. tostring(child.Enabled) .. ")")
+        end
+    end
+end
+
+-- Setup commands
+function TestLoader:SetupCommands()
+    game.Players.LocalPlayer.Chatted:Connect(function(message)
+        if message:lower() == "!testhalf" then
+            self:LoadHalfScreen()
+            
+        elseif message:lower() == "!testfull" then
+            self:LoadFullScreen()
+            
+        elseif message:lower() == "!remove" then
+            self:RemoveAllScreens()
+            
+        elseif message:lower() == "!check" then
+            self:CheckWhatExists()
+            
+        elseif message:lower() == "!testboth" then
+            print("🔄 Testing both screens...")
+            self:RemoveAllScreens()
+            wait(1)
+            self:LoadHalfScreen()
+            wait(3)
+            print("🎯 Now testing conversion...")
+            self:RemoveAllScreens()
+            wait(1)
+            self:LoadFullScreen()
+        end
+    end)
+end
+
+function TestLoader:Init()
+    print("🧪 SIMPLE TEST LOADER STARTED")
+    print("Available commands:")
+    print("!testhalf - Load HALF loading screen")
+    print("!testfull - Load FULL loading screen") 
+    print("!remove   - Remove all loading screens")
+    print("!check    - Check what screens exist")
+    print("!testboth - Test half → full conversion")
+    
+    self:SetupCommands()
+end
+
+-- Start the test loader
+TestLoader:Init()
