@@ -1,0 +1,70 @@
+-- test_loader_fixed.lua
+local TestLoader = {}
+
+function TestLoader:LoadHalfScreen()
+    print("🎯 Loading your HALF screen...")
+    local url = "https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/half_loading.lua"
+    
+    local success = pcall(function()
+        loadstring(game:HttpGet(url))()
+    end)
+    
+    if success then
+        print("✅ Half screen loaded - check PlayerGui")
+    else
+        print("❌ Half screen failed")
+    end
+end
+
+function TestLoader:LoadFullScreen()
+    print("🎯 Loading FIXED full screen...")
+    local url = "https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/fixed_full_loading.lua"
+    
+    local success = pcall(function()
+        loadstring(game:HttpGet(url))()
+    end)
+    
+    if success then
+        print("✅ Fixed full screen loaded - YOU SHOULD SEE RED TEXT!")
+    else
+        print("❌ Fixed full screen failed")
+    end
+end
+
+function TestLoader:RemoveAll()
+    local CoreGui = game:GetService("CoreGui")
+    local Players = game:GetService("Players")
+    local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
+    
+    -- Remove half screen
+    local half = playerGui:FindFirstChild("ProfessionalLoadingScreen")
+    if half then half:Destroy() end
+    
+    -- Remove fixed full screen
+    local fixed = CoreGui:FindFirstChild("FixedFullScreen")
+    if fixed then fixed:Destroy() end
+    
+    -- Remove original full screens
+    local original = CoreGui:FindFirstChild("FinalStageLoadingScreen")
+    if original then original:Destroy() end
+    
+    local black = CoreGui:FindFirstChild("BlackBackground")
+    if black then black:Destroy() end
+    
+    print("🗑️ All screens removed")
+end
+
+function TestLoader:Init()
+    print("🧪 TEST LOADER - FIXED VERSION")
+    print("!testhalf - Your half screen")
+    print("!testfull - FIXED full screen (should show red text)")
+    print("!remove - Remove all")
+    
+    game.Players.LocalPlayer.Chatted:Connect(function(msg)
+        if msg == "!testhalf" then self:LoadHalfScreen() end
+        if msg == "!testfull" then self:LoadFullScreen() end
+        if msg == "!remove" then self:RemoveAll() end
+    end)
+end
+
+TestLoader:Init()
